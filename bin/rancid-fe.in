@@ -81,6 +81,7 @@ $vendor =~ tr/[A-Z]/[a-z]/;
     'redback'		=> 'rrancid',
     'riverstone'	=> 'rivrancid',
     'smc'		=> 'srancid',
+    'tellabs'		=> 'tlrancid',
     'tnt'		=> 'tntrancid',
     'zebra'		=> 'zrancid'
 );
