@@ -54,6 +54,7 @@ bin/rivrancid
 bin/rrancid
 bin/srancid
 bin/tlogin
+bin/tlrancid
 bin/tntlogin
 bin/tntrancid
 bin/trancid
