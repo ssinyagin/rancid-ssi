@@ -71,6 +71,7 @@ $vendor =~ tr/[A-Z]/[a-z]/;
     'foundry'		=> 'francid',
     'hitachi'		=> 'htrancid',
     'hp'		=> 'hrancid',
+    'huawei'            => 'hurancid',
     'juniper'		=> 'jrancid',
     'mrtd'		=> 'mrancid',
     'mrv'		=> 'mrvrancid',

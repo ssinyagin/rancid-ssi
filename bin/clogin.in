@@ -655,15 +655,28 @@ proc run_commands { prompt command } {
 						  send_user -- "$expect_out(buffer)"
 						  send " "
 						  exp_continue }
+	    -re "^ *---- More ----\[^\n\r]*"    {
+				                # akrastel: Huawei
+				                send " "
+				                # akrastel: delete <ESC>[42D\s\s...<ESC>[42D that Huawei sends to clear line
+				                  expect {
+				                        -re "\\e\\\[42D\\s+\\e\\\[42D" {}
+				                  }
+				                  exp_continue }
 	}
     }
     log_user 1
 
-    if { [ string compare "extreme" "$platform" ] } {
-	send -h "exit\r"
+    if { ![ string compare "extreme" "$platform" ] } {
+         # akrastel: extreme needs quit
+         send "quit\r"
+       } elseif { ![ string compare "huawei" "$platform" ] } {
+        # akrastel: Huawei needs quit
+        send "quit\r"
     } else {
-	send -h "quit\r"
+     send "exit\r"
     }
+							
     expect {
 	-re "^\[^\n\r *]*$reprompt"		{
 						  # the Cisco CE and Jnx ERX
@@ -868,6 +881,13 @@ foreach router [lrange $argv $i end] {
 				  set prompt ".? ?$junk\[0-9]+ $expect_out(2,string)";
 				  set platform "extreme"
 				}
+        -re "^<.+>"             {
+                                  # akrastel: detect huawei by presence of <ROUTER>
+                                  set junk $expect_out(0,string);
+                                  regsub -all "\[\]\[]" $junk {\\&} prompt;
+                                  set platform "huawei"
+                                }
+
 	-re "^.+$prompt"	{ set junk $expect_out(0,string);
 				  regsub -all "\[\]\[\(\)]" $junk {\\&} prompt;
 				}
