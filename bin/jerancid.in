@@ -58,7 +58,7 @@ $file = $opt_f;
 $host = $ARGV[0];
 $clean_run = 0;
 $found_end = 0;
-$timeo = 90;				# clogin timeout in seconds
+$timeo = 90;				# jelogin timeout in seconds
 
 my(@commandtable, %commands, @commands);# command lists
 my($aclsort) = ("ipsort");		# ACL sorting mode
@@ -627,13 +627,13 @@ if ($file) {
     print STDOUT "opening file $host\n" if ($log);
     open(INPUT,"<$host") || die "open failed for $host: $!\n";
 } else {
-    print STDERR "executing clogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($debug);
-    print STDOUT "executing clogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($log);
+    print STDERR "executing jelogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($debug);
+    print STDOUT "executing jelogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($log);
     if (defined($ENV{NOPIPE})) {
-	system "clogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null > $host.raw 2>&1" || die "clogin failed for $host: $!\n";
-	open(INPUT, "< $host.raw") || die "clogin failed for $host: $!\n";
+	system "jelogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null > $host.raw 2>&1" || die "jelogin failed for $host: $!\n";
+	open(INPUT, "< $host.raw") || die "jelogin failed for $host: $!\n";
     } else {
-	open(INPUT,"clogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null |") || die "clogin failed for $host: $!\n";
+	open(INPUT,"jelogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null |") || die "jelogin failed for $host: $!\n";
     }
 }
 
@@ -668,8 +668,8 @@ TOP: while(<INPUT>) {
 	last;
     }
     if (/^Error:/) {
-	print STDOUT ("$host clogin error: $_");
-	print STDERR ("$host clogin error: $_") if ($debug);
+	print STDOUT ("$host jelogin error: $_");
+	print STDERR ("$host jelogin error: $_") if ($debug);
 	$clean_run=0;
 	last;
     }
