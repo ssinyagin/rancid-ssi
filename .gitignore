@@ -30,6 +30,7 @@ bin/hpuifilter.o
 bin/hrancid
 bin/htlogin
 bin/htrancid
+bin/hurancid
 bin/jerancid
 bin/jlogin
 bin/jrancid
