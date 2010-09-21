@@ -593,7 +593,7 @@ sub DoNothing {print STDOUT;}
 	{'show redundancy'	=> 'ShowRedundancy'},
 	{'show boot'		=> 'ShowBoot'},
 	{'show environment all'	=> 'ShowEnv'},
-	{'dir'			=> 'DirSlotN'},
+#	{'dir'			=> 'DirSlotN'},
 	{'show hardware'	=> 'ShowHardware'},
 	{'show configuration'	=> 'WriteTerm'}
 );
