@@ -138,6 +138,20 @@ sub CopyComment {
     return(0);
 }
 
+# This routine excludes "show" commands from the command history
+sub CopyHistory {
+    print STDERR "    In CopyComment: $_" if ($debug);
+    print "\n! Command history: \n";
+    
+    while (<INPUT>) {
+	tr/\015//d;
+	last if (/^$prompt/);
+        next if (/\s+show\s+/o);
+	ProcessHistory("","","","!$_");
+	# end of config
+    }
+    return(0);
+}
 
 # dummy function
 sub DoNothing {print STDOUT;}
@@ -147,6 +161,7 @@ sub DoNothing {print STDOUT;}
         {'show sw-version'	=> 'ShowSwVersion'},
         {'show hw-inventory'	=> 'CopyComment'},
         {'show faults active'	=> 'CopyComment'},
+        {'show debugging sw command-history username time' => 'CopyHistory'},
 	{'show running-config'	=> 'CopyTerm'},
 );
 # Use an array to preserve the order of the commands and a hash for mapping
