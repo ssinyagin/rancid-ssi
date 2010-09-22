@@ -35,7 +35,7 @@ $file = $opt_f;
 $host = $ARGV[0];
 $clean_run = 0;
 $found_end = 0;
-$timeo = 90;			# clogin timeout in seconds
+$timeo = 90;			# hulogin timeout in seconds
 
 my(%filter_pwds);		# password filtering mode
 
@@ -191,7 +191,7 @@ sub DoNothing {print STDOUT;}
 @commands=(
 	"display current-configuration"
 );
-$jnxe_cmds=join(";",@commands);
+$huaw_cmds=join(";",@commands);
 $cmds_regexp=join("|",@commands);
 
 open(OUTPUT,">$host.new") || die "Can't open $host.new for writing: $!\n";
@@ -204,13 +204,13 @@ if ($file) {
     print STDOUT "opening file $host\n" if ($log);
     open(INPUT,"<$host") || die "open failed for $host: $!\n";
 } else {
-    print STDERR "executing clogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($debug);
-    print STDOUT "executing clogin -t $timeo -c\"$jnxe_cmds\" $host\n" if ($log);
+    print STDERR "executing hulogin -t $timeo -c\"$huaw_cmds\" $host\n" if ($debug);
+    print STDOUT "executing hulogin -t $timeo -c\"$huaw_cmds\" $host\n" if ($log);
     if (defined($ENV{NOPIPE})) {
-	system "clogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null > $host.raw 2>&1" || die "clogin failed for $host: $!\n";
-	open(INPUT, "< $host.raw") || die "clogin failed for $host: $!\n";
+	system "hulogin -t $timeo -c \"$huaw_cmds\" $host </dev/null > $host.raw 2>&1" || die "hulogin failed for $host: $!\n";
+	open(INPUT, "< $host.raw") || die "hulogin failed for $host: $!\n";
     } else {
-	open(INPUT,"clogin -t $timeo -c \"$jnxe_cmds\" $host </dev/null |") || die "clogin failed for $host: $!\n";
+	open(INPUT,"hulogin -t $timeo -c \"$huaw_cmds\" $host </dev/null |") || die "hulogin failed for $host: $!\n";
     }
 }
 
@@ -239,8 +239,8 @@ print STDERR ("CMD: $_\n");
 
 
     if (/^Error:/) {
-	print STDOUT ("$host clogin error: $_");
-	print STDERR ("$host clogin error: $_") if ($debug);
+	print STDOUT ("$host hulogin error: $_");
+	print STDERR ("$host hulogin error: $_") if ($debug);
 	$clean_run=0;
 	last;
     }
