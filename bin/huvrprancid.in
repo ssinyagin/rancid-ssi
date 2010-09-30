@@ -193,12 +193,30 @@ sub CopyComment {
     return(0);
 }
 
+# filter out "uptime" lines
+sub FilterUptime {
+    print STDERR "    In FilterUptime: $_" if ($debug);
+
+    while (<INPUT>) {
+	tr/\015//d;
+	last if (/^$prompt/);
+
+        s/uptime\s.*$/uptime FI LTERED/;
+        s/StartupTime\s.*$/StartupTime FILTERED/;
+
+	ProcessHistory("","","","# $_");
+	# end of config
+    }
+    return(0);
+}
+
+
 # dummy function
 sub DoNothing {print STDOUT;}
 
 # Main
 @commandtable = (
-        {'display version'                       => 'CopyComment'},
+        {'display version'                       => 'FilterUptime'},
         {'display patch-information'             => 'CopyComment'},
         {'display device'                        => 'CopyComment'},
         {'display device pic-status'             => 'CopyComment'},
