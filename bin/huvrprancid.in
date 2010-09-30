@@ -201,7 +201,7 @@ sub FilterUptime {
 	tr/\015//d;
 	last if (/^$prompt/);
 
-        s/uptime\s.*$/uptime FI LTERED/;
+        s/uptime\s.*$/uptime FILTERED/;
         s/StartupTime\s.*$/StartupTime FILTERED/;
 
 	ProcessHistory("","","","# $_");
