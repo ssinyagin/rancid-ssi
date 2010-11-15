@@ -220,8 +220,6 @@ sub DoNothing {print STDOUT;}
         {'display patch-information'             => 'CopyComment'},
         {'display device'                        => 'CopyComment'},
         {'display device pic-status'             => 'CopyComment'},
-        {'display alarm all'                     => 'CopyComment'},
-        {'display fault-management active-alarm' => 'CopyComment'},
         {'display current-configuration'         => 'WriteTerm'},
 );
 
