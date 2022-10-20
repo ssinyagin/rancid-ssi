@@ -76,7 +76,7 @@ set timeoutdflt 45
 #
 set send_human {.4 .4 .7 .3 5}
 
-set reprompt {<[^>]+>|\[[^\]]+\]}
+set reprompt {<[^>\n\r]+>|\[[^\]\n\r]+\]}
 
 # Find the user in the ENV, or use the unix userid.
 if {[ info exists env(CISCO_USER) ]} {
@@ -570,6 +570,20 @@ proc do_enable { enauser enapasswd } {
     return 0
 }
 
+# Set terminal length
+proc do_screenlength { } {
+    global in_proc
+    global reprompt
+    set in_proc 1
+
+    send "screen-length 0 temporary\r"
+    expect {
+       -re "$reprompt" { }
+    }
+    set in_proc 0
+    return 0
+}
+
 # Run commands given on the command line.
 proc run_commands { command } {
     global reprompt do_saveconfig in_proc platform
@@ -594,8 +608,10 @@ proc run_commands { command } {
 				                # akrastel: Huawei
 				                send " "
 				                # akrastel: delete <ESC>[42D\s\s...<ESC>[42D that Huawei sends to clear line
+						#           delete <ESC>[16D\s\s...<ESC>[16D that Huawei sends to clear line
 				                  expect {
 				                        -re "\\e\\\[42D\\s+\\e\\\[42D" {}
+							-re "\\e\\\[16D\\s+\\e\\\[16D" {}
 				                  }
 				                  exp_continue }
 	}
@@ -755,6 +771,14 @@ foreach router [lrange $argv $i end] {
     }
 
     # we are logged in
+
+    # set term length 0 in cisco terminology
+    if { $do_command || $do_script } {
+        if {[do_screenlength]} {
+          incr exitval
+          continue
+        }
+    }
 
     if { $do_command } {
 	if {[run_commands $command]} {
